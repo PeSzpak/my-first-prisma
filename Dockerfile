@@ -2,8 +2,22 @@ FROM node:lts-alpine
 
 RUN apk add --no-cache bash
 
-RUN npm install -g nestjs/cli
+RUN npm install -g @nestjs/cli
+
+WORKDIR /home/node/app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN chown -R node:node /home/node/app
 
 USER node
 
-WORKDIR /home/node/app
+RUN mkdir -p dist
+
+RUN npx prisma generate
+
+CMD ["npm", "run", "start:dev"]

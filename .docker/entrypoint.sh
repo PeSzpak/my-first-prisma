@@ -1,5 +1,5 @@
 #!/bin/bash
 
 npm install
-npm ruin build
+npm run build
 npm run start:dev
