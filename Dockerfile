@@ -16,8 +16,4 @@ RUN chown -R node:node /home/node/app
 
 USER node
 
-RUN mkdir -p dist
-
-RUN npx prisma generate
-
 CMD ["npm", "run", "start:dev"]
