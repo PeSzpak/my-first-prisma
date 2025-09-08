@@ -12,6 +12,8 @@ RUN npm install
 
 COPY . .
 
+RUN npx prisma generate
+
 RUN chown -R node:node /home/node/app
 
 USER node
