@@ -3,15 +3,24 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserEntity } from '../entities/user.entity';
+import { isPrismaError } from 'src/common/filters/http-exception/errors/utils/is-prisma-error.util';
+import { handleDatabaseErrors } from 'src/common/filters/http-exception/errors/utils/handle-database-errors.utils';
 
 @Injectable()
 export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    return await this.prisma.user.create({
-      data: createUserDto,
-    });
+    try {
+      return await this.prisma.user.create({
+        data: createUserDto,
+      });
+    } catch (error) {
+      if (isPrismaError(error)) {
+        throw handleDatabaseErrors(error);
+      }
+      throw error;
+    }
   }
 
   async findAll(): Promise<UserEntity[]> {
@@ -27,12 +36,17 @@ export class UsersRepository {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    return this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: updateUserDto,
-    });
+    try {
+      return await this.prisma.user.update({
+        where: { id },
+        data: updateUserDto,
+      });
+    } catch (error) {
+      if (isPrismaError(error)) {
+        throw handleDatabaseErrors(error);
+      }
+      throw error;
+    }
   }
 
   async remove(id: number) {
