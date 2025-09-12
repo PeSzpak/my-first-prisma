@@ -20,7 +20,7 @@ export class UsersService {
   async findOne(id: number): Promise<UserEntity> {
     const user = await this.repository.findOne(id);
     if (!user) {
-      throw new NotFoundError('Usuario não econtrado');
+      throw new NotFoundError('Usuario não encontrado');
     }
     return user;
   }
