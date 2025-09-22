@@ -59,18 +59,25 @@ export class UsersRepository {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    return this.prisma.user.update({
-      where: { id },
-      data: updateUserDto,
-      include: {
-        posts: {
-          select: {
-            title: true,
-            createdAt: true,
+    try {
+      return await this.prisma.user.update({
+        where: { id },
+        data: updateUserDto,
+        include: {
+          posts: {
+            select: {
+              title: true,
+              createdAt: true,
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      if (isPrismaError(error)) {
+        throw handleDatabaseErrors(error);
+      }
+      throw error;
+    }
   }
 
   async remove(id: number) {
