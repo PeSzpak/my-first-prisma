@@ -14,6 +14,14 @@ export class UsersRepository {
     try {
       return await this.prisma.user.create({
         data: createUserDto,
+        include: {
+          posts: {
+            select: {
+              title: true,
+              createdAt: true,
+            },
+          },
+        },
       });
     } catch (error) {
       if (isPrismaError(error)) {
@@ -24,13 +32,28 @@ export class UsersRepository {
   }
 
   async findAll(): Promise<UserEntity[]> {
-    return await this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      include: {
+        posts: {
+          select: {
+            title: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number): Promise<UserEntity | null> {
     return this.prisma.user.findUnique({
-      where: {
-        id,
+      where: { id },
+      include: {
+        posts: {
+          select: {
+            title: true,
+            createdAt: true,
+          },
+        },
       },
     });
   }
@@ -40,6 +63,14 @@ export class UsersRepository {
       return await this.prisma.user.update({
         where: { id },
         data: updateUserDto,
+        include: {
+          posts: {
+            select: {
+              title: true,
+              createdAt: true,
+            },
+          },
+        },
       });
     } catch (error) {
       if (isPrismaError(error)) {
@@ -51,9 +82,7 @@ export class UsersRepository {
 
   async remove(id: number) {
     return this.prisma.user.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
   }
 }
