@@ -1,6 +1,6 @@
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
-import { NotFoundError } from 'src/common/errors/types/NotFoundError';
+import { NotFoundError } from 'src/common/filters/http-exception/errors/types/NotFoundError';
 import { PostEntity } from '../entities/post.entity';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { Injectable } from '@nestjs/common';
