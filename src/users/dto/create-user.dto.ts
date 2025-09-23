@@ -13,7 +13,7 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({
-    description: 'Define se o usuario administrados',
+    description: 'Define se o usuario é administrador',
     default: false,
   })
   @IsBoolean()
