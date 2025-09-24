@@ -21,79 +21,217 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# Simple Blog API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Uma API RESTful para gerenciamento de blog construída com NestJS, Prisma ORM e PostgreSQL, incluindo sistema completo de tratamento de erros personalizados e documentação Swagger.
 
-## Project setup
+##  Tecnologias
+
+- **NestJS** - Framework Node.js progressivo
+- **Prisma ORM** - ORM moderno para TypeScript
+- **PostgreSQL** - Banco de dados relacional
+- **Docker & Docker Compose** - Containerização
+- **Swagger/OpenAPI** - Documentação da API
+- **Class Validator** - Validação de dados
+- **TypeScript** - Linguagem tipada
+
+##  Funcionalidades
+
+###  **CRUD Completo**
+- **Usuários**: Criar, listar, buscar, atualizar e deletar usuários
+- **Posts**: Criar, listar, buscar, atualizar e deletar posts
+- **Relacionamentos**: Posts vinculados aos usuários autores
+
+### **Sistema de Tratamento de Erros**
+- Interceptors personalizados para diferentes tipos de erro
+- Conversão automática de erros Prisma para respostas HTTP
+- Tratamento de erros de validação, conflitos e não encontrado
+
+###  **Documentação Automática**
+- Interface Swagger UI interativa
+- Documentação automática dos endpoints
+- Exemplos de requisições e respostas
+
+###  **Validação de Dados**
+- Validação automática de DTOs
+- Sanitização de dados de entrada
+- Mensagens de erro descritivas
+
+##  Pré-requisitos
+
+- **Docker** e **Docker Compose**
+- **Node.js 18+** (se rodar localmente)
+- **Git**
+
+## Instalação e Execução
+
+### **Opção 1: Docker (Recomendado)**
 
 ```bash
-$ npm install
+# 1. Clone o repositório
+git clone https://github.com/PeSzpak/my-first-prisma.git
+cd my-first-prisma/prisma-api
+
+# 2. Suba os containers
+docker-compose up --build
+
+# 3. Aguarde a aplicação subir (pode levar alguns minutos na primeira vez)
+# Acesse: http://localhost:3000
 ```
 
-## Compile and run the project
+### **Opção 2: Execução Local**
 
 ```bash
-# development
-$ npm run start
+# 1. Clone o repositório
+git clone https://github.com/PeSzpak/my-first-prisma.git
+cd my-first-prisma/prisma-api
 
-# watch mode
-$ npm run start:dev
+# 2. Instale as dependências
+npm install
 
-# production mode
-$ npm run start:prod
+# 3. Configure o ambiente
+cp .env.example .env
+# Edite o .env com suas configurações de banco
+
+# 4. Suba apenas o PostgreSQL
+docker-compose up db -d
+
+# 5. Execute as migrações
+npx prisma migrate dev --name init
+
+# 6. Gere o Prisma Client
+npx prisma generate
+
+# 7. Inicie a aplicação
+npm run start:dev
+
+# Acesse: http://localhost:3000
 ```
 
-## Run tests
+##  Documentação da API
+
+Após iniciar a aplicação, acesse:
+
+- **Swagger UI**: http://localhost:3000/api
+- **JSON Schema**: http://localhost:3000/api-json
+- **Health Check**: http://localhost:3000
+
+##  Endpoints Principais
+
+### **Usuários**
+```http
+GET    /users          # Listar todos os usuários
+GET    /users/:id      # Buscar usuário por ID
+POST   /users          # Criar novo usuário
+PATCH  /users/:id      # Atualizar usuário
+DELETE /users/:id      # Deletar usuário
+```
+
+### **Posts**
+```http
+GET    /posts          # Listar todos os posts
+GET    /posts/:id      # Buscar post por ID
+POST   /posts          # Criar novo post
+PATCH  /posts/:id      # Atualizar post
+DELETE /posts/:id      # Deletar post
+```
+
+##  Exemplos de Uso
+
+### **Criar Usuário**
+```bash
+curl -X POST http://localhost:3000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "João Silva",
+    "email": "joao@email.com",
+    "admin": false
+  }'
+```
+
+### **Criar Post**
+```bash
+curl -X POST http://localhost:3000/posts \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Meu primeiro post",
+    "content": "Conteúdo do post...",
+    "authorEmail": "joao@email.com"
+  }'
+```
+
+##  Estrutura do Projeto
+
+```
+src/
+├── common/
+│   └── filters/http-exception/errors/    # Sistema de tratamento de erros
+├── prisma/                               # Configuração do Prisma
+├── posts/                                # Módulo de Posts
+│   ├── dto/                             # Data Transfer Objects
+│   ├── entities/                        # Entidades
+│   ├── repositories/                    # Camada de dados
+│   └── ...
+├── users/                               # Módulo de Usuários
+│   ├── dto/
+│   ├── entities/
+│   ├── repositories/
+│   └── ...
+├── app.module.ts                        # Módulo principal
+└── main.ts                             # Ponto de entrada
+```
+
+##  Tratamento de Erros
+
+O sistema inclui interceptors personalizados que convertem erros internos em respostas HTTP apropriadas:
+
+- **ConflictInterceptor**: Conflitos (409) - ex: email duplicado
+- **NotFoundInterceptor**: Não encontrado (404)
+- **DatabaseInterceptor**: Erros de banco de dados
+- **UnauthorizedInterceptor**: Não autorizado (401)
+
+##  Scripts Úteis
 
 ```bash
-# unit tests
-$ npm run test
+# Desenvolvimento
+npm run start:dev          # Modo desenvolvimento com hot reload
+npm run start:debug        # Modo debug
 
-# e2e tests
-$ npm run test:e2e
+# Build e Produção
+npm run build              # Build da aplicação
+npm run start:prod         # Execução em produção
 
-# test coverage
-$ npm run test:cov
+# Testes
+npm run test               # Testes unitários
+npm run test:e2e           # Testes end-to-end
+npm run test:cov           # Cobertura de testes
+
+# Prisma
+npx prisma studio          # Interface visual do banco
+npx prisma migrate dev     # Executar migrações
+npx prisma generate        # Gerar cliente Prisma
 ```
 
-## Deployment
+##  Testando a API
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+1. **Via Swagger UI**: http://localhost:3000/api
+2. **Via cURL**: Use os exemplos acima
+3. **Via Postman**: Importe a collection do OpenAPI
+4. **Via Prisma Studio**: http://localhost:5555 (se habilitado)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+##  Deploy
+
+Para produção, ajuste as variáveis de ambiente e utilize:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run build
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+##  Licença
 
-## Resources
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# my-first-prisma
+**Desenvolvido usando NestJS + Prisma**
