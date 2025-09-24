@@ -23,215 +23,215 @@
 
 # Simple Blog API
 
-Uma API RESTful para gerenciamento de blog construída com NestJS, Prisma ORM e PostgreSQL, incluindo sistema completo de tratamento de erros personalizados e documentação Swagger.
+A RESTful API for blog management built with NestJS, Prisma ORM, and PostgreSQL, featuring a complete custom error handling system and Swagger documentation.
 
-##  Tecnologias
+## Technologies
 
-- **NestJS** - Framework Node.js progressivo
-- **Prisma ORM** - ORM moderno para TypeScript
-- **PostgreSQL** - Banco de dados relacional
-- **Docker & Docker Compose** - Containerização
-- **Swagger/OpenAPI** - Documentação da API
-- **Class Validator** - Validação de dados
-- **TypeScript** - Linguagem tipada
+- **NestJS** - Progressive Node.js framework
+- **Prisma ORM** - Modern ORM for TypeScript
+- **PostgreSQL** - Relational database
+- **Docker & Docker Compose** - Containerization
+- **Swagger/OpenAPI** - API documentation
+- **Class Validator** - Data validation
+- **TypeScript** - Typed language
 
-##  Funcionalidades
+## Features
 
-###  **CRUD Completo**
-- **Usuários**: Criar, listar, buscar, atualizar e deletar usuários
-- **Posts**: Criar, listar, buscar, atualizar e deletar posts
-- **Relacionamentos**: Posts vinculados aos usuários autores
+### **Complete CRUD Operations**
+- **Users**: Create, list, fetch, update, and delete users
+- **Posts**: Create, list, fetch, update, and delete posts
+- **Relationships**: Posts linked to author users
 
-### **Sistema de Tratamento de Erros**
-- Interceptors personalizados para diferentes tipos de erro
-- Conversão automática de erros Prisma para respostas HTTP
-- Tratamento de erros de validação, conflitos e não encontrado
+### **Error Handling System**
+- Custom interceptors for different error types
+- Automatic conversion of Prisma errors to HTTP responses
+- Handling of validation, conflict, and not found errors
 
-###  **Documentação Automática**
-- Interface Swagger UI interativa
-- Documentação automática dos endpoints
-- Exemplos de requisições e respostas
+### **Automatic Documentation**
+- Interactive Swagger UI interface
+- Automatic endpoint documentation
+- Request and response examples
 
-###  **Validação de Dados**
-- Validação automática de DTOs
-- Sanitização de dados de entrada
-- Mensagens de erro descritivas
+### **Data Validation**
+- Automatic DTO validation
+- Input data sanitization
+- Descriptive error messages
 
-##  Pré-requisitos
+## Prerequisites
 
-- **Docker** e **Docker Compose**
-- **Node.js 18+** (se rodar localmente)
+- **Docker** and **Docker Compose**
+- **Node.js 18+** (if running locally)
 - **Git**
 
-## Instalação e Execução
+## Installation and Execution
 
-### **Opção 1: Docker (Recomendado)**
+### **Option 1: Docker (Recommended)**
 
 ```bash
-# 1. Clone o repositório
+# 1. Clone the repository
 git clone https://github.com/PeSzpak/my-first-prisma.git
 cd my-first-prisma/prisma-api
 
-# 2. Suba os containers
+# 2. Start containers
 docker-compose up --build
 
-# 3. Aguarde a aplicação subir (pode levar alguns minutos na primeira vez)
-# Acesse: http://localhost:3000
+# 3. Wait for the application to start (may take a few minutes on first run)
+# Access: http://localhost:3000
 ```
 
-### **Opção 2: Execução Local**
+### **Option 2: Local Execution**
 
 ```bash
-# 1. Clone o repositório
+# 1. Clone the repository
 git clone https://github.com/PeSzpak/my-first-prisma.git
 cd my-first-prisma/prisma-api
 
-# 2. Instale as dependências
+# 2. Install dependencies
 npm install
 
-# 3. Configure o ambiente
+# 3. Configure environment
 cp .env.example .env
-# Edite o .env com suas configurações de banco
+# Edit .env with your database settings
 
-# 4. Suba apenas o PostgreSQL
+# 4. Start PostgreSQL only
 docker-compose up db -d
 
-# 5. Execute as migrações
+# 5. Run migrations
 npx prisma migrate dev --name init
 
-# 6. Gere o Prisma Client
+# 6. Generate Prisma Client
 npx prisma generate
 
-# 7. Inicie a aplicação
+# 7. Start the application
 npm run start:dev
 
-# Acesse: http://localhost:3000
+# Access: http://localhost:3000
 ```
 
-##  Documentação da API
+## API Documentation
 
-Após iniciar a aplicação, acesse:
+After starting the application, access:
 
 - **Swagger UI**: http://localhost:3000/api
 - **JSON Schema**: http://localhost:3000/api-json
 - **Health Check**: http://localhost:3000
 
-##  Endpoints Principais
+## Main Endpoints
 
-### **Usuários**
+### **Users**
 ```http
-GET    /users          # Listar todos os usuários
-GET    /users/:id      # Buscar usuário por ID
-POST   /users          # Criar novo usuário
-PATCH  /users/:id      # Atualizar usuário
-DELETE /users/:id      # Deletar usuário
+GET    /users          # List all users
+GET    /users/:id      # Get user by ID
+POST   /users          # Create new user
+PATCH  /users/:id      # Update user
+DELETE /users/:id      # Delete user
 ```
 
 ### **Posts**
 ```http
-GET    /posts          # Listar todos os posts
-GET    /posts/:id      # Buscar post por ID
-POST   /posts          # Criar novo post
-PATCH  /posts/:id      # Atualizar post
-DELETE /posts/:id      # Deletar post
+GET    /posts          # List all posts
+GET    /posts/:id      # Get post by ID
+POST   /posts          # Create new post
+PATCH  /posts/:id      # Update post
+DELETE /posts/:id      # Delete post
 ```
 
-##  Exemplos de Uso
+## Usage Examples
 
-### **Criar Usuário**
+### **Create User**
 ```bash
 curl -X POST http://localhost:3000/users \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "João Silva",
-    "email": "joao@email.com",
+    "name": "John Silva",
+    "email": "john@email.com",
     "admin": false
   }'
 ```
 
-### **Criar Post**
+### **Create Post**
 ```bash
 curl -X POST http://localhost:3000/posts \
   -H "Content-Type: application/json" \
   -d '{
-    "title": "Meu primeiro post",
-    "content": "Conteúdo do post...",
-    "authorEmail": "joao@email.com"
+    "title": "My first post",
+    "content": "Post content...",
+    "authorEmail": "john@email.com"
   }'
 ```
 
-##  Estrutura do Projeto
+## Project Structure
 
 ```
 src/
 ├── common/
-│   └── filters/http-exception/errors/    # Sistema de tratamento de erros
-├── prisma/                               # Configuração do Prisma
-├── posts/                                # Módulo de Posts
+│   └── filters/http-exception/errors/    # Error handling system
+├── prisma/                               # Prisma configuration
+├── posts/                                # Posts module
 │   ├── dto/                             # Data Transfer Objects
-│   ├── entities/                        # Entidades
-│   ├── repositories/                    # Camada de dados
+│   ├── entities/                        # Entities
+│   ├── repositories/                    # Data layer
 │   └── ...
-├── users/                               # Módulo de Usuários
+├── users/                               # Users module
 │   ├── dto/
 │   ├── entities/
 │   ├── repositories/
 │   └── ...
-├── app.module.ts                        # Módulo principal
-└── main.ts                             # Ponto de entrada
+├── app.module.ts                        # Main module
+└── main.ts                             # Entry point
 ```
 
-##  Tratamento de Erros
+## Error Handling
 
-O sistema inclui interceptors personalizados que convertem erros internos em respostas HTTP apropriadas:
+The system includes custom interceptors that convert internal errors to appropriate HTTP responses:
 
-- **ConflictInterceptor**: Conflitos (409) - ex: email duplicado
-- **NotFoundInterceptor**: Não encontrado (404)
-- **DatabaseInterceptor**: Erros de banco de dados
-- **UnauthorizedInterceptor**: Não autorizado (401)
+- **ConflictInterceptor**: Conflicts (409) - e.g., duplicate email
+- **NotFoundInterceptor**: Not found (404)
+- **DatabaseInterceptor**: Database errors
+- **UnauthorizedInterceptor**: Unauthorized (401)
 
-##  Scripts Úteis
+## Useful Scripts
 
 ```bash
-# Desenvolvimento
-npm run start:dev          # Modo desenvolvimento com hot reload
-npm run start:debug        # Modo debug
+# Development
+npm run start:dev          # Development mode with hot reload
+npm run start:debug        # Debug mode
 
-# Build e Produção
-npm run build              # Build da aplicação
-npm run start:prod         # Execução em produção
+# Build and Production
+npm run build              # Build application
+npm run start:prod         # Production execution
 
-# Testes
-npm run test               # Testes unitários
-npm run test:e2e           # Testes end-to-end
-npm run test:cov           # Cobertura de testes
+# Tests
+npm run test               # Unit tests
+npm run test:e2e           # End-to-end tests
+npm run test:cov           # Test coverage
 
 # Prisma
-npx prisma studio          # Interface visual do banco
-npx prisma migrate dev     # Executar migrações
-npx prisma generate        # Gerar cliente Prisma
+npx prisma studio          # Visual database interface
+npx prisma migrate dev     # Run migrations
+npx prisma generate        # Generate Prisma client
 ```
 
-##  Testando a API
+## Testing the API
 
 1. **Via Swagger UI**: http://localhost:3000/api
-2. **Via cURL**: Use os exemplos acima
-3. **Via Postman**: Importe a collection do OpenAPI
-4. **Via Prisma Studio**: http://localhost:5555 (se habilitado)
+2. **Via cURL**: Use the examples above
+3. **Via Postman**: Import the OpenAPI collection
+4. **Via Prisma Studio**: http://localhost:5555 (if enabled)
 
-##  Deploy
+## Deploy
 
-Para produção, ajuste as variáveis de ambiente e utilize:
+For production, adjust environment variables and use:
 
 ```bash
 npm run build
 npm run start:prod
 ```
 
-##  Licença
+## License
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ---
 
-**Desenvolvido usando NestJS + Prisma**
+**Built with NestJS + Prisma**
