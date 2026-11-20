@@ -1,0 +1,519 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/": {
+            "get": {
+                "operationId": "AppController_getHello",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "App"
+                ]
+            }
+        },
+        "/users": {
+            "post": {
+                "operationId": "UsersController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserEntity"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    },
+                    "409": {
+                        "description": "Conflito de email"
+                    }
+                },
+                "tags": [
+                    "Users"
+                ]
+            },
+            "get": {
+                "operationId": "UsersController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserEntity"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "tags": [
+                    "Users"
+                ]
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "operationId": "UsersController_findOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserEntity"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "tags": [
+                    "Users"
+                ]
+            },
+            "patch": {
+                "operationId": "UsersController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserEntity"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "tags": [
+                    "Users"
+                ]
+            },
+            "delete": {
+                "operationId": "UsersController_remove",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserEntity"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "tags": [
+                    "Users"
+                ]
+            }
+        },
+        "/posts": {
+            "post": {
+                "operationId": "PostsController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreatePostDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostEntity"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "summary": "Create a new post",
+                "tags": [
+                    "Posts"
+                ]
+            },
+            "get": {
+                "operationId": "PostsController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PostEntity"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "summary": "Get all posts",
+                "tags": [
+                    "Posts"
+                ]
+            }
+        },
+        "/posts/{id}": {
+            "get": {
+                "operationId": "PostsController_findOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "summary": "Get post by ID",
+                "tags": [
+                    "Posts"
+                ]
+            },
+            "patch": {
+                "operationId": "PostsController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePostDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostEntity"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "summary": "Update post",
+                "tags": [
+                    "Posts"
+                ]
+            },
+            "delete": {
+                "operationId": "PostsController_remove",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "403": {
+                        "description": "Acesso negado."
+                    }
+                },
+                "summary": "Delete post",
+                "tags": [
+                    "Posts"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Simple blog",
+        "description": "The Simple Blog API description",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "schemas": {
+            "CreateUserDto": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email do usuario"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "nome completo do usuario"
+                    },
+                    "admin": {
+                        "type": "boolean",
+                        "description": "Define se o usuario é administrador",
+                        "default": false
+                    }
+                },
+                "required": [
+                    "email",
+                    "name",
+                    "admin"
+                ]
+            },
+            "UserEntity": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "admin": {
+                        "type": "boolean"
+                    },
+                    "createdAt": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "admin",
+                    "createdAt"
+                ]
+            },
+            "UpdateUserDto": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email do usuario"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "nome completo do usuario"
+                    },
+                    "admin": {
+                        "type": "boolean",
+                        "description": "Define se o usuario é administrador",
+                        "default": false
+                    }
+                }
+            },
+            "CreatePostDto": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "titulo do post"
+                    },
+                    "content": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "conteudo do post"
+                    },
+                    "authorEmail": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email do criador do post"
+                    }
+                },
+                "required": [
+                    "title",
+                    "content"
+                ]
+            },
+            "PostEntity": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "published": {
+                        "type": "boolean"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "createdAt": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "updateAt": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "authorId": {
+                        "type": "number",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "published",
+                    "title",
+                    "content",
+                    "createdAt",
+                    "updateAt",
+                    "authorId"
+                ]
+            },
+            "UpdatePostDto": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "titulo do post"
+                    },
+                    "content": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "conteudo do post"
+                    },
+                    "authorEmail": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email do criador do post"
+                    }
+                }
+            }
+        }
+    }
+}
