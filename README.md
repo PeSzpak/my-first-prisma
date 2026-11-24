@@ -23,10 +23,10 @@ flowchart LR
   R --> P[PrismaService]
   P --> DB[(PostgreSQL)]
   R -. throws NotFoundError / Prisma errors .-> I[Global interceptors]
-  I -. 404 / 409 / 401 / 500 .-> C
+  I -. 404 / 409 / 401 / 400 .-> C
 ```
 
-The repositories throw domain errors (`NotFoundError`, `UnauthorizedError`) or let Prisma errors bubble up. Four global interceptors in `src/common/filters/http-exception/errors/interceptors` turn them into HTTP responses: `ConflictInterceptor` (409), `NotFoundInterceptor` (404), `UnauthorizedInterceptor` (401) and `DatabaseInterceptor` (Prisma errors, via `handle-database-errors.utils.ts`).
+The repositories throw domain errors (`NotFoundError`, `UnauthorizedError`) or let Prisma errors bubble up. Four global interceptors in `src/common/filters/http-exception/errors/interceptors` turn them into HTTP responses: `ConflictInterceptor` (409), `NotFoundInterceptor` (404), `UnauthorizedInterceptor` (401) and `DatabaseInterceptor` (any other Prisma error becomes 400, via `handle-database-errors.utils.ts`).
 
 Data model (`prisma/schema.prisma`):
 
@@ -86,13 +86,13 @@ Production build: `npm run build && npm run start:prod`.
 | POST | `/users` | create user (`name`, `email`, `admin`) | 201, 400, 409 |
 | GET | `/users` | list users | 200 |
 | GET | `/users/:id` | get user with posts | 200, 404 |
-| PATCH | `/users/:id` | partial update | 200, 400 |
-| DELETE | `/users/:id` | delete | 200 |
+| PATCH | `/users/:id` | partial update | 200, 400 (also for an unknown id) |
+| DELETE | `/users/:id` | delete | 200, 400 |
 | POST | `/posts` | create post (`title`, `content?`, `authorEmail`) | 201, 400, 404 |
 | GET | `/posts` | list posts with author name | 200 |
 | GET | `/posts/:id` | get post with author name and email (empty body if missing) | 200 |
 | PATCH | `/posts/:id` | partial update, can move to another author by `authorEmail` | 200, 400, 404 |
-| DELETE | `/posts/:id` | delete | 200 |
+| DELETE | `/posts/:id` | delete | 200, 400 |
 
 `published` exists in the schema but is not in the DTOs, so the API cannot change it (sending it returns 400).
 
@@ -137,3 +137,9 @@ npm test
 ```
 
 Only the generated `app.controller` and `prisma.service` specs pass today. The users/posts specs fail to load because Jest has no mapping for the `src/...` import paths used in the repositories.
+
+## Known limitations
+
+- Only `P2002` is mapped to a specific status. Any other Prisma error, such as `P2025` (record not found on update/delete) or `P2003` (deleting a user who still has posts), comes back as `400 Bad Request` instead of 404/409.
+- `GET /posts/:id` for a missing id returns 200 with an empty body; only users throw `NotFoundError`.
+- `npm run lint` reports 3 errors and 2 warnings in the current code.
